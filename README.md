@@ -11,3 +11,5 @@ Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"
 Installed Visual Studio is required. 
 
 Disable Defender real-time protection for .manifest support
+
+![Screenshot](https://i.imgur.com/3xLnRqw.png)
