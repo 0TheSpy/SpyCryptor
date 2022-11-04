@@ -559,7 +559,7 @@ void main(int argc, char* argv[])
 
 	unsigned char* idata = (unsigned char*)malloc(sizeof(unsigned char) * fsize);
 	size_t result = fread(idata, 1, fsize, stream);
-	printf("fread %d Fsize %d\n", result, fsize);
+	printf("fread %d fsize %d\n", result, fsize);
 
 	PIMAGE_DOS_HEADER orig_dos = (PIMAGE_DOS_HEADER)idata;
 	if (orig_dos->e_magic != IMAGE_DOS_SIGNATURE)
@@ -615,7 +615,7 @@ void main(int argc, char* argv[])
 	PCHAR platform_vcvars = (orig_nt->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ? (PCHAR)"32" : (PCHAR)"64");
 	printf("platform %08x\n", orig_nt->FileHeader.Machine);
 
-	printf("Extracted contents of %s (size %d)\n", ctx->infile, sizeof(idata));
+	printf("Extracted contents of %s\n", ctx->infile);
 
 	if (RAND_bytes(ctx->key, CRYPTER_BLOCK_LENGTH_BYTES) < 0) {
 		fprintf(stderr, "Failed generating random key (RAND_bytes)");
