@@ -1,6 +1,6 @@
 # SpyCryptor
 
-Encrypt your files (AES)
+Encrypt your files (AES) for research and educational purpose
 
 exe -> exe / exe -> dll / dll -> dll / dll -> exe
 
