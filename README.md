@@ -8,4 +8,6 @@ Methods: manual map injection (if source is dll) or process hollow (if source is
 
 Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-gentrash] [-requireadmin]
 
-Installed Visual Studio is required
+Installed Visual Studio is required. 
+
+Disable Defender real-time protection for .manifest support
