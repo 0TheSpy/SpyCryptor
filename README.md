@@ -1,6 +1,6 @@
 # SpyCryptor
 
-Encrypt your files
+Encrypt your files (AES)
 
 exe -> exe / exe -> dll / dll -> dll / dll -> exe
 
