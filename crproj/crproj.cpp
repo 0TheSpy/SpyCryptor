@@ -787,6 +787,8 @@ void main(int argc, char* argv[])
 	Exec(BAT_SRC);
 
 	//timestamp cleaner
+	//credits: https://github.com/waleedassar/TimeDateStamp/
+
 	int from = 13046400, to = 63072000; //half-year to two years
 	int timestamp = 0;
 
