@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\tools">
+      <UniqueIdentifier>{f0b05a56-5261-4440-8f94-c2f30c58e3d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tools\funcgen">
+      <UniqueIdentifier>{8d83628b-829c-47b7-ac8e-3fcaa5117eed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="crproj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\aes\aes.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\funcs.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\lib_kernel32.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\lib_trash.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mChunkUnitAllocator.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mCode.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mCodeEmulator.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mCodeExpression.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mCodeGenerator.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mCodeLines.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mConfigLoader.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mFunction.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mImport.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mPayloadChunks.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mRandom.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mRandomTypes.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\funcgen\mVars.cpp">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tools\aes\aes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\config.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\funcs.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\globals.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\lib_db_trash.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\lib_kernel32.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\lib_trash.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mArray.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mChunkUnitAllocator.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mChunkUnitRandom.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mCode.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mCodeEmulator.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mCodeExpression.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mCodeGenerator.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mCodeLines.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mConfig.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mConfigLoader.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mFunction.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mImport.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mPayloadChunks.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mRandom.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mRandomTypes.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\funcgen\mVars.h">
+      <Filter>Header Files\tools\funcgen</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
