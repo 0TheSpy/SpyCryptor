@@ -1,6 +1,7 @@
 #pragma once
 
 #include "winternl.h"
+#include "DataObfuscator.h"
 
 DWORD_PTR get_kernel32base()
 {
@@ -71,8 +72,9 @@ DWORD_PTR hNtdll;
 
 // find process ID by process name
 #include <tlhelp32.h>
-int FindProcByName(const char* procname) {
-
+int FindProcByName(const char* processname) {
+  
+	printfdbg("proc %s\n",processname);
 	HANDLE hSnapshot;
 	PROCESSENTRY32 pe;
 	int pid = 0;
