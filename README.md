@@ -23,4 +23,4 @@ SpyPacker.exe -i osiris.dll -o exe -t "csgo.exe" -m
 
 ![Screenshot](https://i.imgur.com/lobWIGn.png)
 
-Credits: @kokke, @waleedassar, @UserExistsError, hitech_crypter, etc..
+Credits: @kokke, @waleedassar, @UserExistsError, @Zer0Mem0ry, hitech_crypter, etc..
