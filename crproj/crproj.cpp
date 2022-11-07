@@ -466,7 +466,7 @@ DWORD   max_build_procs = 0;
 
 void main(int argc, char* argv[])
 { 
-	//Exec("mode con: cols=120 & mode con:lines=30");
+	Exec("mode con: cols=120 & mode con:lines=30");
 	printf("SpyPacker started!'\n");
 	 
 	char* infile_path; char* target_name;
