@@ -12,9 +12,7 @@ Erases itself from Prefetch. Included timedatestamp cleaner and junk code genera
 
 Usage: SpyPacker.exe -in "file" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]
 
-Installed Visual Studio is required. 
-
-Disable Defender real-time protection for .manifest support
+Installed Visual Studio is required. Disable Defender real-time protection for .manifest support
 
 # Examples:
 SpyPacker.exe -i calc.exe -o exe -c -g
