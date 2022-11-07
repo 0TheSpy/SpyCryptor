@@ -10,7 +10,7 @@ Methods: manual map injection (if source is dll) or process hollowing (if source
 
 Erases himself from Prefetch. Included timedatestamp cleaner.
 
-Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-gentrash] [-requireadmin]
+Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]
 
 Installed Visual Studio is required. 
 
