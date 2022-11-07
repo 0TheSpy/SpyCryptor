@@ -16,4 +16,4 @@ Installed Visual Studio is required.
 
 Disable Defender real-time protection for .manifest support
 
-![Screenshot](https://i.imgur.com/AxuyOaS.png)
+![Screenshot](https://i.imgur.com/lobWIGn.png)
