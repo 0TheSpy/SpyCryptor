@@ -10,7 +10,7 @@ Methods: manual map injection (if source is dll) or process hollowing svchost.ex
 
 Erases itself from Prefetch. Included timedatestamp cleaner.
 
-Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]
+Usage: SpyCryptor.exe -in "file" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]
 
 Installed Visual Studio is required. 
 
