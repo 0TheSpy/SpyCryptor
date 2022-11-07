@@ -19,6 +19,6 @@ Disable Defender real-time protection for .manifest support
 # Examples:
 SpyPacker.exe -i calc.exe -o exe -c
 
-SpyPacker.exe -i osiris.dll -o dll -t "csgo.exe" -m
+SpyPacker.exe -i osiris.dll -o exe -t "csgo.exe" -m
 
 ![Screenshot](https://i.imgur.com/lobWIGn.png)
