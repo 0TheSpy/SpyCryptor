@@ -467,7 +467,7 @@ DWORD   max_build_procs = 0;
 void main(int argc, char* argv[])
 { 
 	//Exec("mode con: cols=120 & mode con:lines=30");
-	printf("Spy Crypter started!'\n");
+	printf("SpyPacker started!'\n");
 	 
 	char* infile_path; char* target_name;
 	bool target = false, conpresent = false, trash = false, manifest = false, input = false, output = false;
@@ -527,7 +527,7 @@ void main(int argc, char* argv[])
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
+		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
