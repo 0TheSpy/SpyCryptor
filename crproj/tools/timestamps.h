@@ -164,12 +164,12 @@ char* GetBasicResourceType(unsigned long Type)
 	else pType = 0;
 	return pType;
 }
-
+ 
 char* GetTimeDateStamp_s(unsigned long vTimeDateStamp)
 {
 	if (!vTimeDateStamp)
 	{
-		printf("TimeDateStamp: Empty\r\n");
+		//printf("TimeDateStamp: Empty\r\n");
 		return 0;
 	}
 
@@ -294,7 +294,7 @@ size_t VirtualToRaw(size_t VA, IMAGE_SECTION_HEADER* pSects, int iSectCount)
 bool CleanTimeDateStamps(char* out_exe)
 {
 	//timestamp cleaner
-	//credits: https://github.com/waleedassar/TimeDateStamp/
+	//credits: https://github.com/waleedassar/TimeDateStamp/ 
 
 	int from = 13046400, to = 63072000; //half-year to two years
 	int timestamp = 0;
@@ -437,9 +437,8 @@ bool CleanTimeDateStamps(char* out_exe)
 				TimeDateStamp = pResourceX->TimeDateStamp;
 
 				if (!StartingLevel)
-				{
-					sprintf((char*)Buffer, "TimeDateStamp from root _IMAGE_RESOURCE_DIRECTORY is %s\r\n", GetTimeDateStamp_s(TimeDateStamp));
-					PrintWithLevel(StartingLevel, Buffer);
+				{ 
+					printf("TimeDateStamp from root _IMAGE_RESOURCE_DIRECTORY is %s\r\n", GetTimeDateStamp_s(TimeDateStamp));
 
 					if (TimeDateStamp) {
 						memcpy(buffer + VirtualToRaw((size_t)&pResourceX->TimeDateStamp - (size_t)pMap, pSects, NumberOfSections), &timestamp, sizeof(timestamp));
@@ -453,16 +452,15 @@ bool CleanTimeDateStamps(char* out_exe)
 					{
 						WSTRINGW* pResourceType = (WSTRINGW*)(((unsigned char*)(pResource)) + pParent->NameOffset);
 						unsigned long Length = pResourceType->Length;
-						unsigned long RealLength = wcslen(pResourceType->Buffer);
+						unsigned long RealLength = wcslen(pResourceType->Buffer); 
 
 						if (Length > RealLength) Length = RealLength;
 						if (Length > MAX_RESOURCE_TYPE_STRING_LENGTH) Length = MAX_RESOURCE_TYPE_STRING_LENGTH;
 
 						char cBuffer[MAX_RESOURCE_TYPE_STRING_LENGTH + 1] = { 0 };
 						WideCharToMultiByte(0, 0, pResourceType->Buffer, -1, cBuffer, Length, 0, 0);
-
-						sprintf((char*)Buffer, "TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %s is %s\r\n", cBuffer, GetTimeDateStamp_s(TimeDateStamp));
-						PrintWithLevel(StartingLevel, Buffer);
+						 
+						printf("TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %s is %s\r\n", cBuffer, GetTimeDateStamp_s(TimeDateStamp)); 
 
 						if (TimeDateStamp) {
 							memcpy(buffer + VirtualToRaw((size_t)&pResourceX->TimeDateStamp - (size_t)pMap, pSects, NumberOfSections), &timestamp, sizeof(timestamp));
@@ -473,11 +471,10 @@ bool CleanTimeDateStamps(char* out_exe)
 					{
 						char* pType = GetBasicResourceType(pParent->Name);
 						if (pType)
-							sprintf((char*)Buffer, "TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %s is %s\r\n", pType, GetTimeDateStamp_s(TimeDateStamp));
+							printf("TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %s is %s\r\n", pType, GetTimeDateStamp_s(TimeDateStamp));
 						else
-							sprintf((char*)Buffer, "TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %#x is %s\r\n", pParent->Name, GetTimeDateStamp_s(TimeDateStamp));
-						PrintWithLevel(StartingLevel, Buffer);
-
+							printf("TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of type %#x is %s\r\n", pParent->Name, GetTimeDateStamp_s(TimeDateStamp));
+						
 						if (TimeDateStamp) {
 							memcpy(buffer + VirtualToRaw((size_t)&pResourceX->TimeDateStamp - (size_t)pMap, pSects, NumberOfSections), &timestamp, sizeof(timestamp));
 							printf("Changed _IMAGE_RESOURCE_DIRECTORY TimeDateStamp to %08X\n", timestamp);
@@ -498,9 +495,8 @@ bool CleanTimeDateStamps(char* out_exe)
 						char cBuffer[MAX_RESOURCE_LANG_STRING_LENGTH + 1] = { 0 };
 						WideCharToMultiByte(0, 0, pResourceLang->Buffer, -1, cBuffer, Length, 0, 0);
 
-						sprintf((char*)Buffer, "TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of identifier %s is %s\r\n", cBuffer, GetTimeDateStamp_s(TimeDateStamp));
-						PrintWithLevel(StartingLevel, Buffer);
-
+						printf("TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of identifier %s is %s\r\n", cBuffer, GetTimeDateStamp_s(TimeDateStamp));
+						
 						if (TimeDateStamp) {
 							memcpy(buffer + VirtualToRaw((size_t)&pResourceX->TimeDateStamp - (size_t)pMap, pSects, NumberOfSections), &timestamp, sizeof(timestamp));
 							printf("Changed _IMAGE_RESOURCE_DIRECTORY of %s TimeDateStamp to %08X\n", cBuffer, timestamp);
@@ -508,9 +504,8 @@ bool CleanTimeDateStamps(char* out_exe)
 					}
 					else
 					{
-						sprintf((char*)Buffer, "TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of identifier %#x is %s\r\n", pParent->Name, GetTimeDateStamp_s(TimeDateStamp));
-						PrintWithLevel(StartingLevel, Buffer);
-
+						printf("TimeDateStamp from _IMAGE_RESOURCE_DIRECTORY of identifier %#x is %s\r\n", pParent->Name, GetTimeDateStamp_s(TimeDateStamp));
+						 
 						if (TimeDateStamp) {
 							memcpy(buffer + VirtualToRaw((size_t)&pResourceX->TimeDateStamp - (size_t)pMap, pSects, NumberOfSections), &timestamp, sizeof(timestamp));
 							printf("Changed _IMAGE_RESOURCE_DIRECTORY of %#x TimeDateStamp to %08X\n", pParent->Name, timestamp);
