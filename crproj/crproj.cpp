@@ -476,7 +476,7 @@ void main(int argc, char* argv[])
 		//printf("arg %d %s\n", i, argv[i]);
 		if (!strcmp(argv[i], "-c") || !strcmp(argv[i], "-console"))  
 			conpresent = true; 
-		if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "-gentrash"))
+		if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "-genjunk"))
 			trash = true;
 		if (!strcmp(argv[i], "-m") || !strcmp(argv[i], "-requireadmin"))
 			manifest = true;
@@ -527,7 +527,7 @@ void main(int argc, char* argv[])
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-gentrash] [-requireadmin]\r\n"); 
+		printf("Usage: SpyCryptor.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
