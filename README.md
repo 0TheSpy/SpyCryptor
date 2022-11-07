@@ -17,7 +17,7 @@ Installed Visual Studio is required.
 Disable Defender real-time protection for .manifest support
 
 # Examples:
-SpyPacker.exe -i calc.exe -o exe -c
+SpyPacker.exe -i calc.exe -o exe -c -g
 
 SpyPacker.exe -i osiris.dll -o exe -t "csgo.exe" -m
 
