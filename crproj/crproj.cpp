@@ -532,7 +532,7 @@ void main(int argc, char* argv[])
 	}
 
 	printf("Console present: %d\n", conpresent);
-	printf("Generate trash functions: %d\n", trash);
+	printf("Generate junk functions: %d\n", trash);
 	printf("Require admin: %d\n", manifest);
 
 	CrypterPackageCtx* ctx = new CrypterPackageCtx;
