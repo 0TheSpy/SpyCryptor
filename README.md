@@ -1,14 +1,14 @@
 # SpyPacker
 
-Encrypt your files (AES) for research and educational purpose
+Not intended to bypass anticheats and/or antiviruses. Made for research and educational purposes only!
 
 exe -> exe / exe -> dll / dll -> dll / dll -> exe
 
-Supports x64 and x86 files
+Payload is encrypted in AES. Supports x64 and x86 files.
 
 Methods: manual map injection (if input is dll) or process hollowing svchost.exe (if input is exe). 
 
-Erases itself from Prefetch. Included timedatestamp cleaner.
+Erases itself from Prefetch. Included timedatestamp cleaner and junk code generator for stub.
 
 Usage: SpyCryptor.exe -in "file" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]
 
