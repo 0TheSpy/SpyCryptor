@@ -303,7 +303,7 @@ bool CleanTimeDateStamps(char* out_exe)
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(from, to);
 	timestamp = time(0) - dist(mt);
-	printf("Generated random TimeDateStamp -> %d ", timestamp);
+	printf("Generated random TimeDateStamp (%x) ", timestamp);
 	PrintTimeDateStamp(timestamp);
 
 	std::ifstream src(out_exe, std::ios::binary);
@@ -377,7 +377,7 @@ bool CleanTimeDateStamps(char* out_exe)
 
 	//--------------------- TimeDateStamp From IMAGE_FILE_HEADER----------------------------
 	IMAGE_NT_HEADERS* pNtHdrs = (IMAGE_NT_HEADERS*)(pMap + ((IMAGE_DOS_HEADER*)pMap)->e_lfanew);
-	printf(">> TimeDateStamp from _IMAGE_FILE_HEADER        ---> %x ", pNtHdrs->FileHeader.TimeDateStamp);
+	printf("TimeDateStamp from _IMAGE_FILE_HEADER %x ", pNtHdrs->FileHeader.TimeDateStamp);
 	PrintTimeDateStamp(pNtHdrs->FileHeader.TimeDateStamp);
 
 	if (pNtHdrs->FileHeader.TimeDateStamp) {
@@ -409,7 +409,7 @@ bool CleanTimeDateStamps(char* out_exe)
 	if (rva_Export)
 	{
 		IMAGE_EXPORT_DIRECTORY* pExport = (IMAGE_EXPORT_DIRECTORY*)(pMap + rva_Export);
-		printf(">> TimeDateStamp from _IMAGE_EXPORT_DIRECTORY   ---> %x ", pExport->TimeDateStamp);
+		printf("TimeDateStamp from _IMAGE_EXPORT_DIRECTORY %x ", pExport->TimeDateStamp);
 		PrintTimeDateStamp(pExport->TimeDateStamp);
 
 		if (pExport->TimeDateStamp) {
@@ -419,7 +419,7 @@ bool CleanTimeDateStamps(char* out_exe)
 
 	}
 	else
-		printf(">> TimeDateStamp from _IMAGE_EXPORT_DIRECTORY   ---> Empty\r\n");
+		printf("TimeDateStamp from _IMAGE_EXPORT_DIRECTORY Empty\r\n");
 	//-------------- Trying With Resource Directory ----------------------------
 	if (rva_Resource) //sz_Resource is not consulted by PE Loader
 	{
@@ -536,7 +536,7 @@ bool CleanTimeDateStamps(char* out_exe)
 		Parse_Resources_TimeDateStamp(Parse_Resources_TimeDateStamp, (_IMAGE_RESOURCE_DIRECTORY*)(pMap + rva_Resource), 0, 0, 0, NumberOfLevels);
 	}
 	//-------------- Trying With Debug Directory -------------------------------
-	printf(">> TimeDateStamp from _IMAGE_DEBUG_DIRECTORY    ---> \r\n");
+	printf("TimeDateStamp from _IMAGE_DEBUG_DIRECTORY \r\n");
 	unsigned long Number_Debug_Entries = 0;
 	if (rva_Debug && sz_Debug)
 	{
@@ -550,7 +550,7 @@ bool CleanTimeDateStamps(char* out_exe)
 			IMAGE_DEBUG_DIRECTORY* pDebug = (IMAGE_DEBUG_DIRECTORY*)(pMap + rva_Debug);
 			for (unsigned long i = 0; i < Number_Debug_Entries; i++)
 			{
-				printf(">>> TimeDateStamp from Entry  %x is:             ---> %x ", i + 1, (&pDebug[i])->TimeDateStamp);
+				printf("TimeDateStamp from Entry  %x is: %x ", i + 1, (&pDebug[i])->TimeDateStamp);
 				PrintTimeDateStamp((&pDebug[i])->TimeDateStamp);
 
 				if ((&pDebug[1])->TimeDateStamp) {
@@ -576,7 +576,7 @@ bool CleanTimeDateStamps(char* out_exe)
 									if (strncmp((char*)NB10Buffer, "NB10", 4) == 0)
 									{
 										unsigned long TimeDateStampNB10 = *(unsigned long*)(&NB10Buffer[8]);
-										printf(">>>> TimeDateStamp from PDB2.0 Debug Format     ---> ");
+										printf("TimeDateStamp from PDB2.0 Debug Format ");
 
 										if (!TimeDateStampNB10)		printf("Empty\r\n");
 										else
@@ -603,7 +603,7 @@ bool CleanTimeDateStamps(char* out_exe)
 							if (strncmp((char*)NB10Buffer, "NB10", 4) == 0)
 							{
 								unsigned long TimeDateStampNB10 = *(unsigned long*)(&NB10Buffer[8]);
-								printf(">>>> TimeDateStamp from PDB2.0 Debug Format     ---> ");
+								printf("TimeDateStamp from PDB2.0 Debug Format ");
 
 								if (!TimeDateStampNB10)		printf("Empty\r\n");
 								else
@@ -626,7 +626,7 @@ bool CleanTimeDateStamps(char* out_exe)
 	if (rva_LoadConfig)
 	{
 		IMAGE_LOAD_CONFIG_DIRECTORY* pLoadConfig = (IMAGE_LOAD_CONFIG_DIRECTORY*)(pMap + rva_LoadConfig);
-		printf("TimeDateStamp from _IMAGE_LOAD_CONFIG_DIRECTORY  ---> %x ", pLoadConfig->TimeDateStamp);
+		printf("TimeDateStamp from _IMAGE_LOAD_CONFIG_DIRECTORY %x ", pLoadConfig->TimeDateStamp);
 		PrintTimeDateStamp(pLoadConfig->TimeDateStamp);
 
 		if (pLoadConfig->TimeDateStamp) {
@@ -634,7 +634,7 @@ bool CleanTimeDateStamps(char* out_exe)
 			printf("Changed _IMAGE_LOAD_CONFIG_DIRECTORY TimeDateStamp to %08X\n", 0); //obsolete since WinXP
 		}
 	}
-	else printf("TimeDateStamp from _IMAGE_LOAD_CONFIG_DIRECTORY  ---> Empty\r\n");
+	else printf("TimeDateStamp from _IMAGE_LOAD_CONFIG_DIRECTORY Empty\r\n");
 	//---------------------------------------------------------------------------
 	UnmapInputFileAndCloseHandles(pMap, hMapping, hFile);
 
