@@ -620,9 +620,7 @@ void main(int argc, char* argv[])
 	PMCODE_BLOCK continue_block = ep.generate(config.code.blocks.count.min, config.code.blocks.count.max, IS_START_EP);
 
 	mCodeLines		lines(ep.get_code_generator(), continue_block);
-
-	//
-
+	  
 	if (orig_nt->FileHeader.Characteristics & IMAGE_FILE_DLL)
 		type++;
 
@@ -755,7 +753,7 @@ void main(int argc, char* argv[])
 	 
 	const char*  header_source =
 		"#pragma once\r\n"
-		"#include \"tools/DataObfuscator.h\"\r\n"
+		"#include \"%s/tools/DataObfuscator.h\"\r\n"
 		"%s\r\n" //define DEBUG
 		"%s\r\n" //define INJECT_TO_EXISTING_PROCESS
 		"#define procname XorStr(\"%s\")\r\n"
@@ -766,7 +764,7 @@ void main(int argc, char* argv[])
 		"#endif\r\n"
 		"\r\n";
 
-	fprintf(header_stream, header_source, conpresent ? "#define DEBUG" : "", target ? "#define INJECT_TO_EXISTING_PROCESS" : "", target ? target_name : "");
+	fprintf(header_stream, header_source, curpath.c_str(), conpresent ? "#define DEBUG" : "", target ? "#define INJECT_TO_EXISTING_PROCESS" : "", target ? target_name : "");
 
 	fclose(header_stream);
 	//
