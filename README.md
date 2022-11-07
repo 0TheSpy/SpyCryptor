@@ -1,4 +1,4 @@
-# SpyCryptor
+# SpyPacker
 
 Encrypt your files (AES) for research and educational purpose
 
