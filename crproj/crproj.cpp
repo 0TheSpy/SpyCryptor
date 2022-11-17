@@ -553,7 +553,7 @@ void main(int argc, char* argv[])
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-name \"output.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
+		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-name \"output.exe\"|random] [-console] [-genjunk] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
