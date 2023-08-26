@@ -105,3 +105,100 @@ int FindProcByName(const char* processname) {
 	CloseHandle(hSnapshot);
 	return pid;
 } 
+
+
+char* GetLastErrorAsText()
+{
+    DWORD errorMessageID = ::GetLastError();
+    LPSTR messageBuffer = nullptr;
+    size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+                                 NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);  
+    return messageBuffer;
+}
+
+BOOL SetPrivilege(
+	HANDLE hToken,          // access token handle
+	LPCTSTR lpszPrivilege,  // name of privilege to enable/disable
+	BOOL bEnablePrivilege   // to enable or disable privilege
+)
+{
+	TOKEN_PRIVILEGES oldtp;    /* old token privileges */
+	TOKEN_PRIVILEGES tp;
+	DWORD dwSize = sizeof(TOKEN_PRIVILEGES);
+	LUID luid;
+
+	if (!LookupPrivilegeValue(
+		NULL,            // lookup privilege on local system
+		lpszPrivilege,   // privilege to lookup 
+		&luid))        // receives LUID of privilege
+	{
+		printf("LookupPrivilegeValue error: %s\n", GetLastErrorAsText());
+		return FALSE;
+	}
+
+	tp.PrivilegeCount = 1;
+	tp.Privileges[0].Luid = luid;
+	if (bEnablePrivilege)
+		tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+	else
+		tp.Privileges[0].Attributes = 0;
+
+	// Enable the privilege or disable all privileges.
+
+	if (!AdjustTokenPrivileges(
+		hToken,
+		FALSE,
+		&tp,
+		sizeof(TOKEN_PRIVILEGES),
+		(PTOKEN_PRIVILEGES)&oldtp,
+		(PDWORD)&dwSize))
+	{
+		printf("AdjustTokenPrivileges error: %s\n", GetLastErrorAsText()); //Get error 6 here (ie invalid handle)
+		return FALSE;
+	}
+
+	if (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+
+	{
+		printf("The token does not have the specified privilege. \n");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+ 
+
+
+#include <Psapi.h> 
+void GetRandomProcessPathW(wchar_t* kernelPath)
+{
+	HANDLE hSnapshot;
+	PROCESSENTRY32 pe;
+	PROCESSENTRY32 pid[1024];
+	BOOL hResult;
+	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (INVALID_HANDLE_VALUE == hSnapshot) return;
+	pe.dwSize = sizeof(PROCESSENTRY32);
+	hResult = Process32First(hSnapshot, &pe);
+	int iter = 0;
+	while (hResult) { 
+		pid[iter]=pe;//.th32ProcessID; 
+		iter++;
+		hResult = Process32Next(hSnapshot, &pe);
+	}
+	srand((unsigned)time(NULL));
+	int random = rand() % iter; 
+	printfdbg("Took %d of %d | PID %d: %s\n", random, iter, pid[random].th32ProcessID, pid[random].szExeFile);
+	HANDLE h = OpenProcess(PROCESS_QUERY_INFORMATION, 0, pid[random].th32ProcessID);
+	if (h) {
+		if (GetModuleFileNameExW(h, NULL, kernelPath, MAX_PATH) != 0) 
+		{
+			printfdbg("OK\n"); 
+		}	
+		else printfdbg("(GetModuleFileNameExW error: %s\n",GetLastErrorAsText());
+		CloseHandle(h);
+	}
+	else printfdbg("OpenProcess error: %s\n",GetLastErrorAsText());
+
+	CloseHandle(hSnapshot);
+}

