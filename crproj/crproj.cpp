@@ -533,7 +533,7 @@ void main(int argc, char* argv[])
 				if (strcmp(optarg, "random")) {
 					outname = argv[i];
 					outnametype = 1;
-					printf("Output name %s\n", target_name);
+					printf("Output name %s\n", outname);
 				}
 				else
 				{
