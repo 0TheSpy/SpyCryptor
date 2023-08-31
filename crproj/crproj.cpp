@@ -683,6 +683,7 @@ void main(int argc, char* argv[])
 
 	PCHAR platform = (orig_nt->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ? (PCHAR)"X86" : (PCHAR)"X64");
 	PCHAR platform_vcvars = (orig_nt->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 ? (PCHAR)"32" : (PCHAR)"64");
+
 	printf("platform %08x\n", orig_nt->FileHeader.Machine);
 
 	printf("Extracted contents of %s\n", ctx->infile);
