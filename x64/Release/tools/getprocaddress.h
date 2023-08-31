@@ -94,7 +94,7 @@ int FindProcByName(const char* processname) {
 	// and exit if unsuccessful
 	while (hResult) {
 		// if we find the process: return process ID
-		if (strcmp(procname, pe.szExeFile) == 0) {  
+		if (strcmp(processname, pe.szExeFile) == 0) {  //procname
 			pid = pe.th32ProcessID;
 			break;
 		}
@@ -182,7 +182,7 @@ void GetRandomProcessPathW(wchar_t* kernelPath)
 	hResult = Process32First(hSnapshot, &pe);
 	int iter = 0;
 	while (hResult) { 
-		pid[iter]=pe;//.th32ProcessID; 
+		pid[iter]=pe;
 		iter++;
 		hResult = Process32Next(hSnapshot, &pe);
 	}

