@@ -175,7 +175,7 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 				else printfdbg(XorStr("Error writing memory %s\r\n"),GetLastErrorAsText());
  
 			}else printfdbg(XorStr("Error allocating memory %s\r\n"),GetLastErrorAsText());
- 
+			system("pause");
 		}
 		else printfdbg(XorStr("Error getting context %s\r\n"), GetLastErrorAsText());
 
@@ -198,4 +198,9 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	//pExitProcess(0);
 	return -1;
 }
+
  
+
+
+
+
