@@ -10,7 +10,7 @@ Methods: manual map injection (if input is dll) or process hollowing svchost.exe
 
 Erases itself from Prefetch. Included timedatestamp cleaner and junk code generator for stub.
 
-Usage: SpyPacker.exe -in "file" -out exe|dll [-target "process.exe"] [-name "output.exe"|random] [-console] [-genjunk] [-requireadmin]
+Usage: SpyPacker.exe -in "file" -out exe|dll [-target "process.exe"] [-name "output.exe"|random] [-console] [-genjunk] [-requireadmin] [-ppid] 
 
 Installed Visual Studio is required. Disable Defender real-time protection for .manifest support
 
